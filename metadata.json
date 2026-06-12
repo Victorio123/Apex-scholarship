@@ -1,0 +1,6 @@
+{
+  "name": "Apex Foundation Scholarship Portal",
+  "description": "A comprehensive portal for Nigerian and African graduates to apply for scholarships, track status, and upload academic documents for listed UK, Canadian, and Australian universities.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -24,54 +24,6 @@ export default function AuthPage({ onAuthSuccess, onNavigateLanding }: AuthPageP
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   const [successMsg, setSuccessMsg] = React.useState<string | null>(null);
 
-  // Quick Account Login Action (For development evaluation ease)
-  const handleQuickLogin = async (type: 'admin' | 'applicant_1' | 'applicant_2') => {
-    setLoading(true);
-    setErrorMsg(null);
-    setSuccessMsg(null);
-
-    let targetEmail = 'admin@apex.org';
-    let targetPassword = 'admin123';
-
-    if (type === 'applicant_1') {
-      targetEmail = 'adekunle@gmail.com';
-      targetPassword = 'password123';
-    } else if (type === 'applicant_2') {
-      targetEmail = 'chinedu@gmail.com';
-      targetPassword = 'password123';
-    }
-
-    try {
-      // Auto-seeds the data first to ensure these records exist
-      await fetch('/api/seed', { method: 'POST' }).catch(() => {});
-
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: targetEmail, password: targetPassword })
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setSuccessMsg(data.message);
-        setTimeout(() => {
-          onAuthSuccess({
-            role: data.role,
-            token: data.token,
-            user: data.user,
-            admin: data.admin
-          });
-        }, 600);
-      } else {
-        setErrorMsg(data.message || 'Quick login failed. Please register a new user account.');
-      }
-    } catch (e) {
-      setErrorMsg('Failed to process login connection.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -182,43 +134,6 @@ export default function AuthPage({ onAuthSuccess, onNavigateLanding }: AuthPageP
             <p className="mt-1.5 text-xs text-slate-500">
               {isLogin ? 'Enter your registered email and password.' : 'Eligible for Nigeria, Ghana, Gambia, Tunisia and Kenya only.'}
             </p>
-          </div>
-
-          {/* Core Demo Access Callout Banner (EXTREMELY FRIENDLY) */}
-          <div className="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600 space-y-2" id="demo-quick-login-callout">
-            <div className="font-bold flex items-center gap-1 text-slate-900">
-              <CheckCircle className="h-4 w-4 text-blue-600" />
-              <span>One-Click Development Evaluation Logins</span>
-            </div>
-            <p className="text-slate-500">
-              Click any button below to instantly populate sample data and bypass typing. This allows you to evaluate the applicant status page or the scorer admin dashboard smoothly.
-            </p>
-            <div className="flex flex-wrap gap-2 pt-1">
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('admin')}
-                className="px-2.5 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold rounded-lg transition-colors border border-blue-200 cursor-pointer"
-                id="btn-demo-admin"
-              >
-                Login as Registrar (Admin)
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('applicant_1')}
-                className="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold rounded-lg transition-colors border border-emerald-200 cursor-pointer"
-                id="btn-demo-user-1"
-              >
-                Login as Adekunle (Scholar)
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('applicant_2')}
-                className="px-2.5 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold rounded-lg transition-colors border border-amber-200 cursor-pointer"
-                id="btn-demo-user-2"
-              >
-                Login as Chinedu (Under Review)
-              </button>
-            </div>
           </div>
 
           {/* Form Actions Status */}

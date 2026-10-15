@@ -1,0 +1,27 @@
+name: Test Aikido Safe Chain
+
+on:
+push:
+workflow_dispatch:
+
+jobs:
+test-safe-chain:
+runs-on: ubuntu-latest
+
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+  - name: Setup Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: "22"
+  - name: Install Safe Chain
+    run: |
+      npm install -g @aikidosec/safe-chain
+      safe-chain setup-ci
+  - name: Verify Safe Chain
+    run: npm safe-chain-verify
+  - name: Install dependencies
+    run: npm install
+  - name: Test malware blocking
+    run: npm install safe-chain-test
